@@ -46,6 +46,7 @@ typedef struct s_pipe
 	t_file	infile;
 	t_file	outfile;
 	char	**cmd;
+	s_pipe	*next;
 }	t_pipe;
 
 
