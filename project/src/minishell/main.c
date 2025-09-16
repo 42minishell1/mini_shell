@@ -15,5 +15,6 @@
 int	main()
 {
 	prompt();
+	ft_printf("hello world!\n");
 	return (0);
 }
