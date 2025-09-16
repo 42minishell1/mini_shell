@@ -5,7 +5,7 @@ INC = -I ../../includes
 LIB = ../../library
 
 SRCS = \
-main.c \
+main.c prompt.c\
 
 
 OBJS = $(SRCS:.c=.o)
