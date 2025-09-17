@@ -34,6 +34,7 @@
 // filename == NULL이면 none_file이다.
 // filetype in:0 out:1
 // here_doc normal: 0(꺽쇠 하나), here_doc:1 (꺽쇠 둘)
+// 궁금점. in/outfile 변수가 있는데 파일 타입이 왜 존재하는지?
 typedef struct s_file
 {
 	char	*filename;
@@ -47,6 +48,7 @@ typedef struct s_pipe
 	t_file	outfile;
 	char	**cmd;
 	struct s_pipe	*next;
+	int		fd;
 }	t_pipe;
 
 void	prompt();
