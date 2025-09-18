@@ -31,6 +31,39 @@
 # include <readline/readline.h> // readline
 # include <readline/history.h>  // add_history, clear_history
 
+/*
+	T_WORD,     일반 단어
+	T_PIPE,     |
+	T_LT,       <
+	T_GT,       >
+	T_DLT,      <<
+	T_DGT       >>
+*/
+typedef enum e_toktype
+{
+	T_WORD,
+	T_PIPE,
+	T_LT,
+	T_GT,
+	T_DLT,
+	TDGT
+}	t_toktype;
+
+typedef struct s_tok
+{
+	t_toktype	type;
+	char		*lex;
+	int			quoted;
+}	t_tok;
+
+typedef struct s_buf
+{
+	char	*tmp;
+	size_t	len;
+	size_t	cpa;
+}	t_buf;
+
+
 /*	리다이렉션 종류 
 	F_IN = 0,         <
 	F_OUT_TRUNC = 1,  >
@@ -79,11 +112,19 @@ typedef struct s_heredoc
 */
 typedef struct s_pipe
 {
-	t_file	infile;
-	t_file	outfile;
-	char	**cmd;
+	t_file			infile;
+	t_file			outfile;
+	char			**cmd;
+	t_heredoc		*herelist;
 	struct s_pipe	*next;
 }	t_pipe;
+
+
+/*parsing*/
+int		is_space(int c);
+int		is_op1(char c);
+t_list	*lex_line(const char *line);
+int		push_tok(t_list **list, t_toktype type, char *lex, int quoted);
 
 void	prompt();
 
