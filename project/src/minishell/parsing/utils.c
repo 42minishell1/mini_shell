@@ -1,19 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaemyu <jaemyu@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jaehlee <jaehlee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/16 15:56:11 by jaemyu            #+#    #+#             */
-/*   Updated: 2025/09/16 15:56:11 by jaemyu           ###   ########.fr       */
+/*   Created: 2025/09/16 22:00:58 by jaehlee           #+#    #+#             */
+/*   Updated: 2025/09/16 22:00:58 by jaehlee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/minishell.h"
 
-int	main()
+int	is_space(int c)
 {
-	prompt();
-	return (0);
+	return (c == ' ' || c == '\t' || c == '\n'
+		||c == '\r' || c == '\v' || c == '\f');
 }
+
+int	is_op1(char c)
+{
+	return (c == '|' || c == '<' || c == '>');
+}
+
