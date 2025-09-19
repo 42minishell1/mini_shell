@@ -109,15 +109,20 @@ typedef struct s_pipe
 	char			**cmd;
 	t_heredoc		*herelist;
 	struct s_pipe	*next;
-	int		fd;
+	int				fd;
 }	t_pipe;
 
 
-/*parsing*/
+
+/*utils*/
+void	del_token_content(void *content);
+int		is_word_char(char c);
 int		is_space(int c);
 int		is_op1(char c);
-t_list	*lex_line(const char *line);
-int		push_tok(t_list **list, t_toktype type, char *lex, int quoted);
+/*parsing*/
+int		push_tok(t_list **list, t_toktype type, char *value);
+int		tokenize_metachar(t_list **list, char *line, int i);
+int		tokenize_word(t_list **tokens, char *line, int i);
 
 void	prompt();
 
