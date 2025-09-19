@@ -18,8 +18,7 @@ int	is_space(int c)
 		||c == '\r' || c == '\v' || c == '\f');
 }
 
-int	is_op1(char c)
+int	is_op1(char *c)
 {
-	return (c == '|' || c == '<' || c == '>');
+	return (c == "|" || c == "<" || c == ">" || c == "<<" || c == ">>");
 }
-

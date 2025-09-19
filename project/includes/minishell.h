@@ -46,14 +46,14 @@ typedef enum e_toktype
 	T_LT,
 	T_GT,
 	T_DLT,
-	TDGT
+	T_DGT
 }	t_toktype;
 
 typedef struct s_tok
 {
-	t_toktype	type;
-	char		*lex;
-	int			quoted;
+	char			*value;
+	t_toktype		type;
+	struct s_tok	*next;
 }	t_tok;
 
 typedef struct s_buf
