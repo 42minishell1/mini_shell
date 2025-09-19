@@ -56,14 +56,6 @@ typedef struct s_tok
 	struct s_tok	*next;
 }	t_tok;
 
-typedef struct s_buf
-{
-	char	*tmp;
-	size_t	len;
-	size_t	cpa;
-}	t_buf;
-
-
 /*	리다이렉션 종류 
 	F_IN = 0,         <
 	F_OUT_TRUNC = 1,  >
@@ -117,6 +109,7 @@ typedef struct s_pipe
 	char			**cmd;
 	t_heredoc		*herelist;
 	struct s_pipe	*next;
+	int		fd;
 }	t_pipe;
 
 
