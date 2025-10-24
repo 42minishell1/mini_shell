@@ -39,5 +39,3 @@ t_list	*tokenizer(char *line)
 	}
 	return (tokens);
 }
-
-
