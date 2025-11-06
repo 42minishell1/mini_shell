@@ -5,8 +5,17 @@ INC = -I ../../includes
 LIB = ../../library
 
 SRCS = \
-main.c prompt.c\
-
+	main.c \
+	prompt.c \
+	parsing/lexer.c \
+	parsing/lexer_tokens.c \
+	parsing/lexer_utils.c \
+	parsing/parser.c \
+	parsing/parser_nodes.c \
+	parsing/parser_segment.c \
+	parsing/parser_pipeline.c \
+	parsing/parser_args.c \
+	parsing/parser_cleanup.c
 
 OBJS = $(SRCS:.c=.o)
 

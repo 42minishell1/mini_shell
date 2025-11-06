@@ -12,7 +12,28 @@
 
 #include "minishell.h"
 
-void	prompt()
+static void	process_line(char *line)
+{
+	t_pipe	*pipeline;
+	int		status;
+
+	pipeline = NULL;
+	add_history(line);
+	status = parse_line(line, &pipeline);
+	if (status == PARSE_ALLOC_ERROR)
+		perror("minishell");
+	else if (status == PARSE_SYNTAX_ERROR)
+		ft_putendl_fd("minishell: syntax error", STDERR_FILENO);
+	if (!pipeline)
+		return ;
+	if (status == PARSE_OK)
+	{
+		/* 실행부가 pipeline을 받아 실행하도록 연결 예정 */
+	}
+	free_pipeline(pipeline);
+}
+
+void	prompt(void)
 {
 	char	*str;
 
@@ -20,9 +41,9 @@ void	prompt()
 	{
 		str = readline("shell : ");
 		if (!str)
-			break;
-		else if (*str)
-			add_history(str);
+			break ;
+		if (*str)
+			process_line(str);
 		free(str);
 	}
 	ft_printf("exit\n");

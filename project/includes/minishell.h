@@ -13,7 +13,6 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-
 # include "libft.h"
 # include <stdio.h>  // printf, perror
 # include <stdlib.h> // malloc, free, exit, getenv
@@ -104,21 +103,41 @@ typedef struct s_heredoc
 */
 typedef struct s_pipe
 {
-	t_file			infile;
-	t_file			outfile;
+	t_file			*infile;
+	t_file			*outfile;
 	char			**cmd;
 	t_heredoc		*herelist;
 	struct s_pipe	*next;
-	int		fd;
+	int				fd;
 }	t_pipe;
 
+typedef enum e_parse_status
+{
+	PARSE_ALLOC_ERROR = -1,
+	PARSE_OK = 0,
+	PARSE_SYNTAX_ERROR = 1
+}	t_parse_status;
 
-/*parsing*/
+/*utils*/
+void	free_token(void *content);
+int		is_word_char(char c);
 int		is_space(int c);
 int		is_op1(char c);
-t_list	*lex_line(const char *line);
-int		push_tok(t_list **list, t_toktype type, char *lex, int quoted);
+/*parsing*/
+int		push_tok(t_list **list, t_toktype type, char *value);
+int		tokenize_metachar(t_list **list, char *line, int i);
+int		tokenize_word(t_list **tokens, char *line, int i);
+t_list	*lexer(char *line);
+t_pipe	*pipe_new(void);
+int		set_file(t_file **slot, const char *filename, t_ftype type, int quoted);
+int		append_heredoc_node(t_pipe *pipe, const char *delimiter, int quoted);
+int		parse_segment(t_pipe *pipe, t_list **cursor);
+int		build_pipeline(t_list *tokens, t_pipe **out);
+int		append_word(char ***array, const char *word);
+void	free_str_array(char **array);
+int		parse_line(char *line, t_pipe **pipeline);
+void	free_pipeline(t_pipe *pipeline);
 
-void	prompt();
+void	prompt(void);
 
 #endif
