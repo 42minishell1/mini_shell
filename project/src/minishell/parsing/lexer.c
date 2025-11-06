@@ -10,9 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
-t_list	*tokenizer(char *line)
+/* 입력 문자열을 토큰 리스트로 변환한다 */
+t_list	*lexer(char *line)
 {
 	t_list	*tokens;
 	int		i;
@@ -23,7 +24,7 @@ t_list	*tokenizer(char *line)
 	while (line[i])
 	{
 		if (is_space(line[i]))
-		{	
+		{
 			i++;
 			continue ;
 		}
@@ -32,7 +33,7 @@ t_list	*tokenizer(char *line)
 			len = tokenize_word(&tokens, line, i);
 		if (len == -1)
 		{
-			ft_lstclear(&tokens, &del_token_content);
+			ft_lstclear(&tokens, &free_token);
 			return (NULL);
 		}
 		i += len;
