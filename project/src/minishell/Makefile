@@ -7,10 +7,20 @@ LIB = ../../library
 SRCS = \
 	main.c \
 	prompt.c \
+	execution/exec_external.c \
 	execution/exec_pipeline.c \
+	execution/exec_wait.c \
 	execution/heredoc.c \
 	execution/heredoc_utils.c \
 	execution/heredoc_writer.c \
+	execution/redir.c \
+	execution/builtin.c \
+	oooo/echo.c \
+	oooo/cd.c \
+	oooo/pwd.c \
+	oooo/export.c \
+	oooo/env.c \
+	oooo/exit.c \
 	utils/shell_state.c \
 	parsing/lexer.c \
 	parsing/lexer_tokens.c \

@@ -15,7 +15,8 @@
 // pwd - 	현재 위치를 출력해주는 명령어
 // pwd -L - 심볼릭 링크 안에 있다면 심볼릭 링크의 경로를 표시한다.
 // pwd -P - 심볼릭 링크 안에 있다면 심볼릭 링크가 가리키는 디렉토리 경로를 표시한다.
-void	pwd(t_pipe *tool)
+int	pwd(t_pipe *tool)
 {
-
+	(void)tool;
+	return (0);
 }

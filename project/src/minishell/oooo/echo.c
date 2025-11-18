@@ -24,7 +24,8 @@
 // echo$? 마지막으로 종료된 명령어의 종료상태
 // echo$$ 현재 쉘의 PID값
 
-void	echo(t_pipe *tool)
+int	echo(t_pipe *tool)
 {
-
+	(void)tool;
+	return (0);
 }

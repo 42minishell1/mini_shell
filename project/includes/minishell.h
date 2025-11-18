@@ -151,16 +151,29 @@ void	free_pipeline(t_pipe *pipeline);
 
 void	prompt(t_shell *shell);
 
-int		exec_pipe(t_shell *shell, t_pipe *pipeline);
+int		execute_pipeline(t_shell *shell, t_pipe *pipeline);
 
 void	destroy_shell(t_shell *shell);
 void	init_shell(t_shell *shell, char **envp);
 
 void	cleanup_heredocs(t_pipe *pipeline);
 int		prepare_heredocs(t_shell *shell, t_pipe *pipeline);
-
 int		process_single_heredoc(t_shell *shell, t_pipe *pipe, t_heredoc *hd);
-
 int		write_heredoc_body(const char *delimit, int quoted, int fd);
+
+void	close_redir(t_pipe *node);
+int		open_redir(t_pipe *node);
+int		wait_pipeline(pid_t *pids, int count, t_shell *shell);
+
+int		is_builtin(char **cmd);
+int		run_builtin_parent(t_shell *shell, t_pipe *node);
+int		run_builtin_child(t_shell *shell, t_pipe *node);
+void	exec_external(t_shell *shell, t_pipe *node);
+int		echo(t_pipe *tool);
+int		cd(t_pipe *tool);
+int		pwd(t_pipe *tool);
+int		export(t_pipe *tool);
+int		env_builtin(t_pipe *tool);
+int		exit_builtin(t_pipe *tool);
 
 #endif

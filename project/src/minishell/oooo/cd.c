@@ -25,7 +25,8 @@
 // cd ~계정명 -					입력한 사용자의 홈 디랙토라로 이동
 // CD - -					이전 경로로 이동
 
-void	cd(t_pipe *tool)
+int	cd(t_pipe *tool)
 {
-
+	(void)tool;
+	return (0);
 }

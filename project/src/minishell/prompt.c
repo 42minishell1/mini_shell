@@ -30,11 +30,9 @@ static void	process_line(t_shell *shell, char *line)
 	{
 		int	exec_status;
 
-		exec_status = exec_pipe(shell, pipeline);
-		if (exec_status != 0)
+		exec_status = execute_pipeline(shell, pipeline);
+		if (exec_status == -1)
 			ft_putendl_fd("minishell: execution failed", STDERR_FILENO);
-		else
-			shell->last_status = exec_status;
 	}
 	free_pipeline(pipeline);
 }

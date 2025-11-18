@@ -25,7 +25,8 @@
 // $ 문자열로 변수 참조 가능
 // echo $ENV_HELLO = world
 
-void	export(t_pipe *tool)
+int	export(t_pipe *tool)
 {
-
+	(void)tool;
+	return (0);
 }
