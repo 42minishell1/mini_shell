@@ -6,7 +6,7 @@
 /*   By: jaemyu <jaemyu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 18:43:10 by jaemyu            #+#    #+#             */
-/*   Updated: 2025/08/22 20:41:14 by jaemyu           ###   ########.fr       */
+/*   Updated: 2025/11/17 16:37:35 by jaemyu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,6 @@ t_list	*ft_lstlast(t_list *lst);
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 t_list	*ft_lstnew(void *content);
 int		ft_lstsize(t_list *lst);
+int		ft_strcmp(const char *s1, const char *s2);
 
 #endif

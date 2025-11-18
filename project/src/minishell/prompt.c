@@ -6,13 +6,13 @@
 /*   By: jaemyu <jaemyu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 15:51:48 by jaemyu            #+#    #+#             */
-/*   Updated: 2025/09/16 15:51:48 by jaemyu           ###   ########.fr       */
+/*   Updated: 2025/11/17 16:30:57 by jaemyu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	process_line(char *line)
+static void	process_line(t_shell *shell, char *line)
 {
 	t_pipe	*pipeline;
 	int		status;
@@ -28,22 +28,29 @@ static void	process_line(char *line)
 		return ;
 	if (status == PARSE_OK)
 	{
-		/* 실행부가 pipeline을 받아 실행하도록 연결 예정 */
+		int	exec_status;
+
+		exec_status = exec_pipe(shell, pipeline);
+		if (exec_status != 0)
+			ft_putendl_fd("minishell: execution failed", STDERR_FILENO);
+		else
+			shell->last_status = exec_status;
 	}
 	free_pipeline(pipeline);
 }
 
-void	prompt(void)
+void	prompt(t_shell *shell)
 {
 	char	*str;
 
+	(void)shell;
 	while (1)
 	{
 		str = readline("shell : ");
 		if (!str)
 			break ;
 		if (*str)
-			process_line(str);
+			process_line(shell, str);
 		free(str);
 	}
 	ft_printf("exit\n");

@@ -16,8 +16,10 @@ CC = cc -Wall -Wextra -Werror -g
 
 all: $(NAME)
 
+READLINE_LDFLAGS = -lreadline -lncurses
+
 $(NAME): $(MINISHELL_A) $(LIBFT_A)
-	@$(CC) $^ -o $@
+	@$(CC) $^ -o $@ $(READLINE_LDFLAGS)
 	
 $(MINISHELL_A): $(MINISHELL)
 	@$(MAKE) -C $(MINISHELL) -s

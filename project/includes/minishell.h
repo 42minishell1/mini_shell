@@ -30,6 +30,8 @@
 # include <readline/readline.h> // readline
 # include <readline/history.h>  // add_history, clear_history
 
+# define HEREDOC_TEMPLATE "/tmp/minishell_hdXXXXXX"
+
 /*
 	T_WORD,     일반 단어
 	T_PIPE,     |
@@ -118,6 +120,15 @@ typedef enum e_parse_status
 	PARSE_SYNTAX_ERROR = 1
 }	t_parse_status;
 
+typedef struct s_shell
+{
+	char	**envp;
+	int		last_status;
+	int		stdin_backup;
+	int		stdout_backup;
+}	t_shell;
+
+
 /*utils*/
 void	free_token(void *content);
 int		is_word_char(char c);
@@ -138,6 +149,18 @@ void	free_str_array(char **array);
 int		parse_line(char *line, t_pipe **pipeline);
 void	free_pipeline(t_pipe *pipeline);
 
-void	prompt(void);
+void	prompt(t_shell *shell);
+
+int		exec_pipe(t_shell *shell, t_pipe *pipeline);
+
+void	destroy_shell(t_shell *shell);
+void	init_shell(t_shell *shell, char **envp);
+
+void	cleanup_heredocs(t_pipe *pipeline);
+int		prepare_heredocs(t_shell *shell, t_pipe *pipeline);
+
+int		process_single_heredoc(t_shell *shell, t_pipe *pipe, t_heredoc *hd);
+
+int		write_heredoc_body(const char *delimit, int quoted, int fd);
 
 #endif
