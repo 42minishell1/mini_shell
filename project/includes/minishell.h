@@ -31,6 +31,10 @@
 # include <readline/history.h>  // add_history, clear_history
 
 # define HEREDOC_TEMPLATE "/tmp/minishell_hdXXXXXX"
+# define PIPE_LIMIT 256
+# define PIPE_RESET(fd) do { (fd)[0] = -1; (fd)[1] = -1; } while (0)
+# define IS_ISOLATED_BUILTIN(n, prev) \
+	(is_builtin((n)->cmd) && !(n)->next && (prev) == -1)
 
 /*
 	T_WORD,     일반 단어
@@ -164,6 +168,9 @@ int		write_heredoc_body(const char *delimit, int quoted, int fd);
 void	close_redir(t_pipe *node);
 int		open_redir(t_pipe *node);
 int		wait_pipeline(pid_t *pids, int count, t_shell *shell);
+void	pipeline_child_process(t_shell *shell, t_pipe *node,
+			int prev_fd, int pipefd[2]);
+void	pipeline_parent_after_fork(int *prev_fd, int pipefd[2]);
 
 int		is_builtin(char **cmd);
 int		run_builtin_parent(t_shell *shell, t_pipe *node);

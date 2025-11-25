@@ -12,39 +12,6 @@
 
 #include "minishell.h"
 
-#define PIPE_LIMIT 256
-#define RESET_PIPE(fd) do { (fd)[0] = -1; (fd)[1] = -1; } while (0)
-#define IS_ISOLATED_BUILTIN(n, prev) (is_builtin((n)->cmd) && !(n)->next && (prev) == -1)
-
-static void	child_process(t_shell *shell, t_pipe *node, int prev_fd, int pipefd[2])
-{
-	if (prev_fd != -1)
-	{
-		dup2(prev_fd, STDIN_FILENO);
-		close(prev_fd);
-	}
-	if (node->next)
-	{
-		close(pipefd[0]);
-		dup2(pipefd[1], STDOUT_FILENO);
-		close(pipefd[1]);
-	}
-	if (open_redir(node) == -1)
-		exit(1);
-	if (is_builtin(node->cmd))
-		exit(run_builtin_child(shell, node));
-	exec_external(shell, node);
-}
-
-static void	parent_after_fork(int *prev_fd, int pipefd[2])
-{
-	if (*prev_fd != -1)
-		close(*prev_fd);
-	if (pipefd[1] != -1)
-		close(pipefd[1]);
-	*prev_fd = pipefd[0];
-}
-
 static int	handle_single_builtin(t_shell *shell, t_pipe **node, int prev_fd)
 {
 	if (!*node || !IS_ISOLATED_BUILTIN(*node, prev_fd))
@@ -57,51 +24,64 @@ static int	handle_single_builtin(t_shell *shell, t_pipe **node, int prev_fd)
 	return (1);
 }
 
+static int	start_child_process(t_shell *shell, t_pipe *node,
+			pid_t *slot, int *prev_fd)
+{
+	int	pipefd[2];
+
+	if (!node->next)
+		PIPE_RESET(pipefd);
+	else if (pipe(pipefd) == -1)
+		return (-1);
+	*slot = fork();
+	if (*slot == -1)
+		return (-1);
+	if (*slot == 0)
+		pipeline_child_process(shell, node, *prev_fd, pipefd);
+	pipeline_parent_after_fork(prev_fd, pipefd);
+	return (0);
+}
+
+static int	process_pipeline_node(t_shell *shell, t_pipe **node,
+			pid_t *slot, int *prev_fd)
+{
+	int	result;
+
+	result = handle_single_builtin(shell, node, *prev_fd);
+	if (result == -1)
+		return (-1);
+	if (result == 1 || !*node)
+		return (1);
+	if (start_child_process(shell, *node, slot, prev_fd) == -1)
+		return (-1);
+	*node = (*node)->next;
+	return (0);
+}
+
 static int	run_pipeline_loop(t_shell *shell, t_pipe *node, pid_t *pids, int *count_out)
 {
 	int	prev_fd;
-	int	pipefd[2];
 	int	count;
-	int	error;
+	int	res;
 
 	prev_fd = -1;
 	count = 0;
-	error = 0;
 	while (node && count < PIPE_LIMIT)
 	{
-		int	single;
-
-		single = handle_single_builtin(shell, &node, prev_fd);
-		if (single == -1)
+		res = process_pipeline_node(shell, &node, &pids[count], &prev_fd);
+		if (res == -1)
 		{
-			error = 1;
-			break ;
+			if (prev_fd != -1)
+				close(prev_fd);
+			return (-1);
 		}
-		if (single == 1)
-			continue ;
-		if (!node->next)
-			RESET_PIPE(pipefd);
-		else if (pipe(pipefd) == -1)
-		{
-			error = 1;
-			break ;
-		}
-		pids[count] = fork();
-		if (pids[count] == -1)
-		{
-			error = 1;
-			break ;
-		}
-		if (pids[count] == 0)
-			child_process(shell, node, prev_fd, pipefd);
-		parent_after_fork(&prev_fd, pipefd);
-		node = node->next;
-		count++;
+		if (res == 0)
+			count++;
 	}
 	if (prev_fd != -1)
 		close(prev_fd);
 	*count_out = count;
-	if (error || (node && count >= PIPE_LIMIT))
+	if (node && count >= PIPE_LIMIT)
 		return (-1);
 	return (0);
 }

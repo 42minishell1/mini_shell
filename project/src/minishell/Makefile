@@ -9,6 +9,7 @@ SRCS = \
 	prompt.c \
 	execution/exec_external.c \
 	execution/exec_pipeline.c \
+	execution/exec_pipeline_child.c \
 	execution/exec_wait.c \
 	execution/heredoc.c \
 	execution/heredoc_utils.c \
