@@ -6,23 +6,11 @@
 /*   By: jaemyu <jaemyu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 14:20:39 by jaemyu            #+#    #+#             */
-/*   Updated: 2025/11/17 14:20:39 by jaemyu           ###   ########.fr       */
+/*   Updated: 2025/12/06 14:28:58 by jaemyu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static int	handle_single_builtin(t_shell *shell, t_pipe **node, int prev_fd)
-{
-	if (!*node || !IS_ISOLATED_BUILTIN(*node, prev_fd))
-		return (0);
-	if (open_redir(*node) == -1)
-		return (-1);
-	shell->last_status = run_builtin_parent(shell, *node);
-	close_redir(*node);
-	*node = (*node)->next;
-	return (1);
-}
 
 static int	start_child_process(t_shell *shell, t_pipe *node,
 			pid_t *slot, int *prev_fd)
@@ -30,7 +18,7 @@ static int	start_child_process(t_shell *shell, t_pipe *node,
 	int	pipefd[2];
 
 	if (!node->next)
-		PIPE_RESET(pipefd);
+		pipe_reset(pipefd);
 	else if (pipe(pipefd) == -1)
 		return (-1);
 	*slot = fork();
@@ -47,7 +35,7 @@ static int	process_pipeline_node(t_shell *shell, t_pipe **node,
 {
 	int	result;
 
-	result = handle_single_builtin(shell, node, *prev_fd);
+	result = handle_parent_builtin(shell, node, *prev_fd);
 	if (result == -1)
 		return (-1);
 	if (result == 1 || !*node)
@@ -58,7 +46,8 @@ static int	process_pipeline_node(t_shell *shell, t_pipe **node,
 	return (0);
 }
 
-static int	run_pipeline_loop(t_shell *shell, t_pipe *node, pid_t *pids, int *count_out)
+static int	run_pipeline_loop(t_shell *shell, t_pipe *node,
+			pid_t *pids, int *count_out)
 {
 	int	prev_fd;
 	int	count;

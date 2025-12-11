@@ -16,10 +16,11 @@ static void	process_line(t_shell *shell, char *line)
 {
 	t_pipe	*pipeline;
 	int		status;
+	int		exec_status;
 
 	pipeline = NULL;
 	add_history(line);
-	status = parse_line(line, &pipeline);
+	status = parse_line(shell, line, &pipeline);
 	if (status == PARSE_ALLOC_ERROR)
 		perror("minishell");
 	else if (status == PARSE_SYNTAX_ERROR)
@@ -28,8 +29,6 @@ static void	process_line(t_shell *shell, char *line)
 		return ;
 	if (status == PARSE_OK)
 	{
-		int	exec_status;
-
 		exec_status = execute_pipeline(shell, pipeline);
 		if (exec_status == -1)
 			ft_putendl_fd("minishell: execution failed", STDERR_FILENO);
@@ -41,10 +40,15 @@ void	prompt(t_shell *shell)
 {
 	char	*str;
 
-	(void)shell;
+	setup_parent_signals();
 	while (1)
 	{
 		str = readline("shell : ");
+		if (g_last_signal)
+		{
+			shell->last_status = g_last_signal;
+			g_last_signal = 0;
+		}
 		if (!str)
 			break ;
 		if (*str)

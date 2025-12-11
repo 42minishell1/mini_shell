@@ -12,8 +12,21 @@
 
 #include "minishell.h"
 
-int	env_builtin(t_pipe *tool)
+int	env_builtin(t_shell *shell, t_pipe *tool)
 {
-	(void)tool;
+	int	i;
+
+	if (tool->cmd && tool->cmd[1])
+		return (ft_putendl_fd("minishell: env: too many arguments",
+				STDERR_FILENO), 1);
+	if (!shell || !shell->envp)
+		return (0);
+	i = 0;
+	while (shell->envp[i])
+	{
+		if (ft_strchr(shell->envp[i], '='))
+			ft_putendl_fd(shell->envp[i], STDOUT_FILENO);
+		i++;
+	}
 	return (0);
 }

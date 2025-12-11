@@ -49,3 +49,30 @@ int	is_word_char(char c)
 		return (0);
 	return (1);
 }
+
+int	measure_word(char *line, int i)
+{
+	int		len;
+	char	quote;
+
+	len = 0;
+	quote = 0;
+	while (line[i + len])
+	{
+		if ((line[i + len] == '\'' || line[i + len] == '\"'))
+		{
+			if (quote == 0)
+				quote = line[i + len];
+			else if (quote == line[i + len])
+				quote = 0;
+			len++;
+			continue ;
+		}
+		if (!quote && (is_space(line[i + len]) || is_op1(line[i + len])))
+			break ;
+		len++;
+	}
+	if (quote != 0)
+		return (-1);
+	return (len);
+}

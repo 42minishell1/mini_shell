@@ -32,9 +32,6 @@
 
 # define HEREDOC_TEMPLATE "/tmp/minishell_hdXXXXXX"
 # define PIPE_LIMIT 256
-# define PIPE_RESET(fd) do { (fd)[0] = -1; (fd)[1] = -1; } while (0)
-# define IS_ISOLATED_BUILTIN(n, prev) \
-	(is_builtin((n)->cmd) && !(n)->next && (prev) == -1)
 
 /*
 	T_WORD,     일반 단어
@@ -132,12 +129,12 @@ typedef struct s_shell
 	int		stdout_backup;
 }	t_shell;
 
-
 /*utils*/
 void	free_token(void *content);
 int		is_word_char(char c);
 int		is_space(int c);
 int		is_op1(char c);
+int		measure_word(char *line, int i);
 /*parsing*/
 int		push_tok(t_list **list, t_toktype type, char *value);
 int		tokenize_metachar(t_list **list, char *line, int i);
@@ -146,12 +143,30 @@ t_list	*lexer(char *line);
 t_pipe	*pipe_new(void);
 int		set_file(t_file **slot, const char *filename, t_ftype type, int quoted);
 int		append_heredoc_node(t_pipe *pipe, const char *delimiter, int quoted);
-int		parse_segment(t_pipe *pipe, t_list **cursor);
-int		build_pipeline(t_list *tokens, t_pipe **out);
+int		parse_segment(t_shell *shell, t_pipe *pipe, t_list **cursor);
+int		build_pipeline(t_shell *shell, t_list *tokens, t_pipe **out);
+int		is_quoted_word(const char *s);
+int		process_heredoc(t_pipe *pipe, t_tok *word, int quoted);
+int		process_file_redir(t_shell *shell, t_pipe *pipe,
+			t_tok *redir, t_tok *word);
 int		append_word(char ***array, const char *word);
 void	free_str_array(char **array);
-int		parse_line(char *line, t_pipe **pipeline);
+int		parse_line(t_shell *shell, char *line, t_pipe **pipeline);
 void	free_pipeline(t_pipe *pipeline);
+int		is_var_char(int c);
+char	*expand_dollar(t_shell *shell, const char *src, size_t *idx);
+int		push_char(char **buf, char c);
+int		append_value(char **buf, char *val);
+int		append_buffer(char ***out, char *buf);
+int		flush_buffer(char ***out, char **buf);
+int		handle_space(char ***out, char **buf);
+int		add_word_part(char ***out, char **buf, char *val, int quoted);
+int		expand_word(t_shell *shell, const char *src, char ***out);
+char	*expand_str_simple(t_shell *shell, const char *src);
+char	*strip_quotes_only(const char *src);
+
+char	*env_get(char **envp, const char *key);
+int		env_set(char ***envp, const char *key, const char *val);
 
 void	prompt(t_shell *shell);
 
@@ -159,11 +174,15 @@ int		execute_pipeline(t_shell *shell, t_pipe *pipeline);
 
 void	destroy_shell(t_shell *shell);
 void	init_shell(t_shell *shell, char **envp);
+void	setup_parent_signals(void);
+void	setup_child_signals(void);
+extern volatile sig_atomic_t	g_last_signal;
 
 void	cleanup_heredocs(t_pipe *pipeline);
 int		prepare_heredocs(t_shell *shell, t_pipe *pipeline);
 int		process_single_heredoc(t_shell *shell, t_pipe *pipe, t_heredoc *hd);
-int		write_heredoc_body(const char *delimit, int quoted, int fd);
+int		write_heredoc_body(t_shell *shell,
+			const char *delimit, int quoted, int fd);
 
 void	close_redir(t_pipe *node);
 int		open_redir(t_pipe *node);
@@ -171,16 +190,21 @@ int		wait_pipeline(pid_t *pids, int count, t_shell *shell);
 void	pipeline_child_process(t_shell *shell, t_pipe *node,
 			int prev_fd, int pipefd[2]);
 void	pipeline_parent_after_fork(int *prev_fd, int pipefd[2]);
+void	pipe_reset(int fd[2]);
+int		is_isolated_builtin(t_pipe *node, int prev_fd);
+int		handle_parent_builtin(t_shell *shell, t_pipe **node, int prev_fd);
 
 int		is_builtin(char **cmd);
 int		run_builtin_parent(t_shell *shell, t_pipe *node);
 int		run_builtin_child(t_shell *shell, t_pipe *node);
 void	exec_external(t_shell *shell, t_pipe *node);
-int		echo(t_pipe *tool);
-int		cd(t_pipe *tool);
-int		pwd(t_pipe *tool);
-int		export(t_pipe *tool);
-int		env_builtin(t_pipe *tool);
-int		exit_builtin(t_pipe *tool);
+
+int		echo(t_pipe *node);
+int		cd(t_shell *shell, t_pipe *node);
+int		pwd(t_pipe *node);
+int		export(t_shell *shell, t_pipe *tool);
+int		env_builtin(t_shell *shell, t_pipe *tool);
+int		exit_builtin(t_shell *shell, t_pipe *tool);
+int		unset(t_shell *shell, t_pipe *tool);
 
 #endif

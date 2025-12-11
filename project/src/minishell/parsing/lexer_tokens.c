@@ -110,25 +110,22 @@ int	tokenize_metachar(t_list **list, char *line, int i)
 /* 현재 위치에서 일반 단어 토큰을 추출한다 */
 int	tokenize_word(t_list **tokens, char *line, int i)
 {
-	int		j;
+	int		len;
 	char	*word;
 
-	j = 0;
-	while (line[i + j] && is_word_char(line[i + j]))
-		j++;
-	if (j == 0)
+	len = measure_word(line, i);
+	if (len == -1)
+		return (-1);
+	if (len == 0)
 		return (0);
-	word = ft_substr(line, i, j);
+	word = ft_substr(line, i, len);
 	if (!word)
 	{
 		errno = ENOMEM;
 		return (-1);
 	}
 	if (push_tok(tokens, T_WORD, word) == -1)
-	{
-		free(word);
-		return (-1);
-	}
+		return (free(word), -1);
 	free(word);
-	return (j);
+	return (len);
 }

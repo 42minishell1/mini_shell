@@ -16,8 +16,6 @@ static int	open_infile(t_pipe *node)
 {
 	int		fd;
 
-	if (!node->infile || !node->infile->filename)
-		return (-1);
 	if (node->infile->type == F_IN)
 		fd = open(node->infile->filename, O_RDONLY);
 	else if (node->infile->type == F_HEREDOC)
@@ -48,26 +46,26 @@ static int	open_outfile(t_pipe *node)
 
 int	open_redir(t_pipe *node)
 {
-	node->fd = open_infile(node);
-	if (node->fd != -1)
-	{
-		if (dup2(node->fd, STDIN_FILENO) == -1)
-			return (-1);
-	}
-	if (node->outfile)
-	{
-		int	out_fd;
+	int	out_fd;
 
-		out_fd = open_outfile(node);
-		if (out_fd == -1)
+	node->fd = -1;
+	out_fd = -1;
+	if (node->infile)
+	{
+		node->fd = open_infile(node);
+		if (node->fd == -1)
 			return (-1);
-		if (dup2(out_fd, STDOUT_FILENO) == -1)
-		{
-			close(out_fd);
-			return (-1);
-		}
-		close(out_fd);
+		if (dup2(node->fd, STDIN_FILENO) == -1)
+			return (close(node->fd), node->fd = -1, -1);
 	}
+	if (!node->outfile)
+		return (0);
+	out_fd = open_outfile(node);
+	if (out_fd == -1)
+		return (-1);
+	if (dup2(out_fd, STDOUT_FILENO) == -1)
+		return (close(out_fd), -1);
+	close(out_fd);
 	return (0);
 }
 

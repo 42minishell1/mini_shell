@@ -30,7 +30,7 @@ static int	has_nonspace(const char *line)
 }
 
 /* 한 줄을 파싱해 파이프라인 구조체를 생성한다 */
-int	parse_line(char *line, t_pipe **pipeline)
+int	parse_line(t_shell *shell, char *line, t_pipe **pipeline)
 {
 	t_list	*tokens;
 	int		status;
@@ -48,7 +48,7 @@ int	parse_line(char *line, t_pipe **pipeline)
 			return (PARSE_ALLOC_ERROR);
 		return (PARSE_SYNTAX_ERROR);
 	}
-	status = build_pipeline(tokens, pipeline);
+	status = build_pipeline(shell, tokens, pipeline);
 	ft_lstclear(&tokens, &free_token);
 	return (status);
 }

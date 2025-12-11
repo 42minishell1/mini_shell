@@ -1,25 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaemyu <jaemyu@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/16 15:56:11 by jaemyu            #+#    #+#             */
-/*   Updated: 2025/09/16 15:56:11 by jaemyu           ###   ########.fr       */
+/*   Created: 2025/09/17 15:25:23 by jaemyu            #+#    #+#             */
+/*   Updated: 2025/09/17 15:25:23 by jaemyu           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(int ac, char **av, char **envp)
+int	pwd(t_pipe *node)
 {
-	t_shell	shell;
+	char	*cwd;
 
-	(void)ac;
-	(void)av;
-	init_shell(&shell, envp);
-	prompt(&shell);
-	destroy_shell(&shell);
+	(void)node;
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+	{
+		perror("minishell: pwd");
+		return (1);
+	}
+	ft_putendl_fd(cwd, STDOUT_FILENO);
+	free(cwd);
 	return (0);
 }

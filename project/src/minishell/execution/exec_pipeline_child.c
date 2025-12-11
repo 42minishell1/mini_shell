@@ -15,6 +15,7 @@
 void	pipeline_child_process(t_shell *shell, t_pipe *node,
 			int prev_fd, int pipefd[2])
 {
+	setup_child_signals();
 	if (prev_fd != -1)
 	{
 		dup2(prev_fd, STDIN_FILENO);

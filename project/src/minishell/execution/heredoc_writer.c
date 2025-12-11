@@ -12,9 +12,10 @@
 
 #include "minishell.h"
 
-int	write_heredoc_body(const char *delimit, int quoted, int fd)
+int	write_heredoc_body(t_shell *shell, const char *delimit, int quoted, int fd)
 {
 	char	*line;
+	char	*expanded;
 
 	while (1)
 	{
@@ -22,11 +23,14 @@ int	write_heredoc_body(const char *delimit, int quoted, int fd)
 		if (!line || ft_strcmp(line, delimit) == 0)
 			break ;
 		if (!quoted)
-		{
-			/*환경변수 확장*/
-		}
-		write(fd, line , ft_strlen(line));
+			expanded = expand_str_simple(shell, line);
+		else
+			expanded = ft_strdup(line);
+		if (!expanded)
+			return (free(line), -1);
+		write(fd, expanded, ft_strlen(expanded));
 		write(fd, "\n", 1);
+		free(expanded);
 		free(line);
 	}
 	free(line);

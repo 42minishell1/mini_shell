@@ -50,7 +50,7 @@ int	process_single_heredoc(t_shell *shell, t_pipe *pipe, t_heredoc *hd)
 	fd = open_temp(&tmp_path);
 	if (fd == -1)
 		return (-1);
-	if (write_heredoc_body(hd->delim, hd->quoted, fd) == -1)
+	if (write_heredoc_body(shell, hd->delim, hd->quoted, fd) == -1)
 	{
 		close(fd);
 		unlink(tmp_path);

@@ -25,7 +25,8 @@ static int	pipe_is_empty(t_pipe *pipe)
 }
 
 /* 토큰 커서 위치에서 파이프 노드 하나를 구성한다 */
-static int	process_pipeline_node(t_list **cursor, t_pipe **head, t_pipe **tail)
+static int	process_pipeline_node(t_shell *shell,
+			t_list **cursor, t_pipe **head, t_pipe **tail)
 {
 	t_pipe	*node;
 	int		status;
@@ -38,7 +39,7 @@ static int	process_pipeline_node(t_list **cursor, t_pipe **head, t_pipe **tail)
 	else
 		(*tail)->next = node;
 	*tail = node;
-	status = parse_segment(node, cursor);
+	status = parse_segment(shell, node, cursor);
 	if (status != PARSE_OK)
 		return (status);
 	if (pipe_is_empty(node))
@@ -53,7 +54,7 @@ static int	process_pipeline_node(t_list **cursor, t_pipe **head, t_pipe **tail)
 }
 
 /* 토큰 리스트 전체를 파이프라인 연결 리스트로 변환한다 */
-int	build_pipeline(t_list *tokens, t_pipe **out)
+int	build_pipeline(t_shell *shell, t_list *tokens, t_pipe **out)
 {
 	t_pipe	*head;
 	t_pipe	*tail;
@@ -63,7 +64,7 @@ int	build_pipeline(t_list *tokens, t_pipe **out)
 	tail = NULL;
 	while (tokens)
 	{
-		status = process_pipeline_node(&tokens, &head, &tail);
+		status = process_pipeline_node(shell, &tokens, &head, &tail);
 		if (status != PARSE_OK)
 		{
 			free_pipeline(head);

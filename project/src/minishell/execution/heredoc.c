@@ -35,16 +35,18 @@ int	prepare_heredocs(t_shell *shell, t_pipe *pipeline)
 void	cleanup_heredocs(t_pipe *pipeline)
 {
 	t_pipe	*node;
+	char	*name;
 
 	node = pipeline;
 	while (node)
 	{
-		if (node->infile && node->infile->type == F_IN && node->infile->filename)
+		if (node->infile && node->infile->type == F_IN
+			&& node->infile->filename)
 		{
-			if (ft_strnstr(node->infile->filename, "/tmp/minishell_hd", 16))
-				unlink(node->infile->filename);
+			name = node->infile->filename;
+			if (ft_strnstr(name, "/tmp/minishell_hd", 16))
+				unlink(name);
 		}
 		node = node->next;
 	}
-	
 }
