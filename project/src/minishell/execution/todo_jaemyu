@@ -1,6 +1,0 @@
-실행파트 구현해야 하는 것
-1. echo, cd, pwd, export, env, exit
-2. error 예외처리
-3. heredoc
-4. in/out file, cmd 처리
-5. 시그널처리
