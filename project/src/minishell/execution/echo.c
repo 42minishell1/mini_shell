@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-/* 인자가 -n 플래그 형태인지 확인한다. */
 static int	is_nflag(char *s)
 {
 	int	i;
@@ -26,7 +25,6 @@ static int	is_nflag(char *s)
 	return (1);
 }
 
-/* 인자를 공백으로 출력하고 -n 플래그가 있으면 개행을 생략한다. */
 int	echo(t_pipe *node)
 {
 	int		i;

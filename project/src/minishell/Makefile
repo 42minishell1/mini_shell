@@ -16,6 +16,7 @@ SRCS = \
 	execution/heredoc_utils.c \
 	execution/heredoc_writer.c \
 	execution/redir.c \
+	execution/redir_utils.c \
 	execution/env_utils.c \
 	execution/builtin.c \
 	execution/echo.c \
@@ -35,6 +36,7 @@ SRCS = \
 	parsing/parser_segment.c \
 	parsing/parser_segment_utils.c \
 	parsing/parser_pipeline.c \
+	parsing/parser_redir.c \
 	parsing/parser_args.c \
 	parsing/expansion_shared.c \
 	parsing/expansion_buffer.c \

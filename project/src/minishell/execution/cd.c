@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-/* 디렉터리 이동이 성공하면 PWD/OLDPWD 값을 갱신한다. */
 static int	update_env_pwd(t_shell *shell, const char *cwd)
 {
 	char	*old;
@@ -27,7 +26,6 @@ static int	update_env_pwd(t_shell *shell, const char *cwd)
 	return (0);
 }
 
-/* HOME 처리와 환경변수 정리를 포함한 cd 빌트인을 구현한다. */
 int	cd(t_shell *shell, t_pipe *node)
 {
 	char	*target;

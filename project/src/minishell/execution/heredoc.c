@@ -12,42 +12,52 @@
 
 #include "minishell.h"
 
-/* 모든 히어독 노드를 순회하며 임시 파일을 생성한다. */
 int	prepare_heredocs(t_shell *shell, t_pipe *pipeline)
 {
 	t_pipe		*node;
 	t_heredoc	*hd;
+	t_list		*redir;
 
 	node = pipeline;
 	while (node)
 	{
 		hd = node->herelist;
+		redir = node->redirs;
 		while (hd)
 		{
-			if (process_single_heredoc(shell, node, hd) == -1)
+			while (redir && ((t_file *)redir->content)->type != F_HEREDOC)
+				redir = redir->next;
+			if (!redir)
+				return (-1);
+			if (process_single_heredoc(shell,
+					(t_file *)redir->content, hd) == -1)
 				return (-1);
 			hd = hd->next;
+			if (redir)
+				redir = redir->next;
 		}
 		node = node->next;
 	}
 	return (0);
 }
 
-/* 준비 과정에서 만든 히어독 임시 파일들을 삭제한다. */
 void	cleanup_heredocs(t_pipe *pipeline)
 {
 	t_pipe	*node;
-	char	*name;
+	t_list	*redir;
+	t_file	*file;
 
 	node = pipeline;
 	while (node)
 	{
-		if (node->infile && node->infile->type == F_IN
-			&& node->infile->filename)
+		redir = node->redirs;
+		while (redir)
 		{
-			name = node->infile->filename;
-			if (ft_strnstr(name, "/tmp/minishell_hd", 16))
-				unlink(name);
+			file = (t_file *)redir->content;
+			if (file->filename
+				&& ft_strnstr(file->filename, "/tmp/minishell_hd", 16))
+				unlink(file->filename);
+			redir = redir->next;
 		}
 		node = node->next;
 	}

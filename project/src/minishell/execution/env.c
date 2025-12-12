@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-/* env 명령 인자가 없을 때 환경변수를 출력하고, 추가 인자에는 에러를 낸다. */
 int	env_builtin(t_shell *shell, t_pipe *tool)
 {
 	int	i;

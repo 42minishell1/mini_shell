@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-/* 히어독 입력을 위한 고유 임시 파일을 만들고 FD를 반환한다. */
 static int	open_temp(char **path_out)
 {
 	char	*path;
@@ -32,19 +31,17 @@ static int	open_temp(char **path_out)
 	return (fd);
 }
 
-/* 생성된 히어독 경로로 infile 정보를 교체한다. */
-static int	finalize_heredoc(t_pipe *pipe, const char *path)
+static int	finalize_heredoc_file(t_file *redir, const char *path)
 {
-	free(pipe->infile->filename);
-	pipe->infile->filename = ft_strdup(path);
-	if (!pipe->infile->filename)
+	free(redir->filename);
+	redir->filename = ft_strdup(path);
+	if (!redir->filename)
 		return (-1);
-	pipe->infile->type = F_IN;
+	redir->type = F_IN;
 	return (0);
 }
 
-/* 히어독 하나를 생성해 내용 작성 후 노드에 할당한다. */
-int	process_single_heredoc(t_shell *shell, t_pipe *pipe, t_heredoc *hd)
+int	process_single_heredoc(t_shell *shell, t_file *redir, t_heredoc *hd)
 {
 	char	*tmp_path;
 	int		fd;
@@ -61,7 +58,7 @@ int	process_single_heredoc(t_shell *shell, t_pipe *pipe, t_heredoc *hd)
 		return (-1);
 	}
 	close(fd);
-	if (finalize_heredoc(pipe, tmp_path) == -1)
+	if (finalize_heredoc_file(redir, tmp_path) == -1)
 	{
 		unlink(tmp_path);
 		free(tmp_path);

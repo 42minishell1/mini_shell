@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-/* envp 배열에서 주어진 키의 값을 찾아 반환한다. */
 char	*env_get(char **envp, const char *key)
 {
 	size_t	len;
@@ -31,7 +30,6 @@ char	*env_get(char **envp, const char *key)
 	return (NULL);
 }
 
-/* envp에 저장할 KEY=VALUE 형태의 문자열을 생성한다. */
 static char	*build_entry(const char *key, const char *val)
 {
 	char	*tmp;
@@ -45,7 +43,6 @@ static char	*build_entry(const char *key, const char *val)
 	return (entry);
 }
 
-/* 동일한 키가 존재하면 해당 항목을 새 엔트리로 교체한다. */
 static int	replace_existing(char ***envp, const char *key,
 			char *entry, size_t len)
 {
@@ -65,7 +62,6 @@ static int	replace_existing(char ***envp, const char *key,
 	return (0);
 }
 
-/* 필요하다면 envp를 확장하며 KEY=VALUE 쌍을 설정하거나 추가한다. */
 int	env_set(char ***envp, const char *key, const char *val)
 {
 	char	*entry;

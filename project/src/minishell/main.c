@@ -21,5 +21,5 @@ int	main(int ac, char **av, char **envp)
 	init_shell(&shell, envp);
 	prompt(&shell);
 	destroy_shell(&shell);
-	return (0);
+	return (shell.last_status);
 }

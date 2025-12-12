@@ -12,14 +12,12 @@
 
 #include "minishell.h"
 
-/* 파이프 FD 쌍을 초기 sentinel 값으로 리셋한다. */
 void	pipe_reset(int fd[2])
 {
 	fd[0] = -1;
 	fd[1] = -1;
 }
 
-/* 현재 노드가 포크나 파이프 없이 단독으로 실행 가능한 빌트인인지 확인한다. */
 int	is_isolated_builtin(t_pipe *node, int prev_fd)
 {
 	if (!node || !is_builtin(node->cmd))
@@ -31,7 +29,6 @@ int	is_isolated_builtin(t_pipe *node, int prev_fd)
 	return (1);
 }
 
-/* 셸 상태에 영향을 주므로 부모에서 실행되어야 하는 빌트인인지 확인한다. */
 static int	is_parent_builtin(t_pipe *node)
 {
 	if (!node || !node->cmd || !node->cmd[0])
@@ -47,7 +44,6 @@ static int	is_parent_builtin(t_pipe *node)
 	return (0);
 }
 
-/* 부모 빌트인 실행 후 표준 입출력을 원래 상태로 되돌린다. */
 static void	restore_stdio(int saved_in, int saved_out)
 {
 	if (saved_in != -1)
@@ -62,7 +58,6 @@ static void	restore_stdio(int saved_in, int saved_out)
 	}
 }
 
-/* 단독 노드인 부모 빌트인을 리다이렉션 적용 후 실행한다. */
 int	handle_parent_builtin(t_shell *shell, t_pipe **node, int prev_fd)
 {
 	int	saved_in;
@@ -75,7 +70,13 @@ int	handle_parent_builtin(t_shell *shell, t_pipe **node, int prev_fd)
 	if (saved_in == -1 || saved_out == -1)
 		return (close(saved_in), close(saved_out), -1);
 	if (open_redir(*node) == -1)
-		return (restore_stdio(saved_in, saved_out), -1);
+	{
+		close_redir(*node);
+		restore_stdio(saved_in, saved_out);
+		shell->last_status = 1;
+		*node = (*node)->next;
+		return (1);
+	}
 	shell->last_status = run_builtin_parent(shell, *node);
 	close_redir(*node);
 	restore_stdio(saved_in, saved_out);

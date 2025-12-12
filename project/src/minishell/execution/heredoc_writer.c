@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-/* 구분자를 만날 때까지 히어독을 읽어 필요 시 확장하여 기록한다. */
 int	write_heredoc_body(t_shell *shell, const char *delimit, int quoted, int fd)
 {
 	char	*line;

@@ -108,6 +108,7 @@ typedef struct s_pipe
 {
 	t_file			*infile;
 	t_file			*outfile;
+	t_list			*redirs;
 	char			**cmd;
 	t_heredoc		*herelist;
 	struct s_pipe	*next;
@@ -141,7 +142,8 @@ int		tokenize_metachar(t_list **list, char *line, int i);
 int		tokenize_word(t_list **tokens, char *line, int i);
 t_list	*lexer(char *line);
 t_pipe	*pipe_new(void);
-int		set_file(t_file **slot, const char *filename, t_ftype type, int quoted);
+t_file	*file_new(const char *filename, t_ftype type, int quoted);
+int		set_file(t_pipe *pipe, t_file **slot, t_file *file);
 int		append_heredoc_node(t_pipe *pipe, const char *delimiter, int quoted);
 int		parse_segment(t_shell *shell, t_pipe *pipe, t_list **cursor);
 int		build_pipeline(t_shell *shell, t_list *tokens, t_pipe **out);
@@ -180,7 +182,8 @@ extern volatile sig_atomic_t	g_last_signal;
 
 void	cleanup_heredocs(t_pipe *pipeline);
 int		prepare_heredocs(t_shell *shell, t_pipe *pipeline);
-int		process_single_heredoc(t_shell *shell, t_pipe *pipe, t_heredoc *hd);
+int		process_single_heredoc(t_shell *shell,
+			t_file *redir, t_heredoc *hd);
 int		write_heredoc_body(t_shell *shell,
 			const char *delimit, int quoted, int fd);
 

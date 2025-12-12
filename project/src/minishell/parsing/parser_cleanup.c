@@ -21,6 +21,20 @@ static void	free_file(t_file *file)
 	free(file);
 }
 
+/* 리다이렉션 리스트를 해제한다 */
+static void	free_redirs(t_list *list)
+{
+	t_list	*next;
+
+	while (list)
+	{
+		next = list->next;
+		free_file((t_file *)list->content);
+		free(list);
+		list = next;
+	}
+}
+
 /* heredoc 연결 리스트 전체를 해제한다 */
 static void	free_herelist(t_heredoc *list)
 {
@@ -43,8 +57,7 @@ void	free_pipeline(t_pipe *pipeline)
 	while (pipeline)
 	{
 		next = pipeline->next;
-		free_file(pipeline->infile);
-		free_file(pipeline->outfile);
+		free_redirs(pipeline->redirs);
 		free_str_array(pipeline->cmd);
 		free_herelist(pipeline->herelist);
 		free(pipeline);

@@ -12,13 +12,11 @@
 
 #include "minishell.h"
 
-/* 환경 변수명에 사용할 수 있는 문자인지 확인한다. */
 int	is_var_char(int c)
 {
 	return (ft_isalnum(c) || c == '_');
 }
 
-/* 마지막 종료 코드를 문자열로 변환한다. */
 static char	*itoa_status(int status)
 {
 	char	*num;
@@ -29,7 +27,6 @@ static char	*itoa_status(int status)
 	return (num);
 }
 
-/* 주어진 키 길이만큼 잘라 환경변수 값을 조회한다. */
 static char	*get_env_value(t_shell *shell, const char *key, size_t len)
 {
 	char	*name;
@@ -45,7 +42,6 @@ static char	*get_env_value(t_shell *shell, const char *key, size_t len)
 	return (ft_strdup(val));
 }
 
-/* $ 구문을 해석해 확장 결과 문자열을 반환한다. */
 char	*expand_dollar(t_shell *shell, const char *src, size_t *idx)
 {
 	size_t	start;
@@ -66,7 +62,6 @@ char	*expand_dollar(t_shell *shell, const char *src, size_t *idx)
 	return (val);
 }
 
-/* 버퍼에 문자를 하나 추가한다. */
 int	push_char(char **buf, char c)
 {
 	char	tmp[2];

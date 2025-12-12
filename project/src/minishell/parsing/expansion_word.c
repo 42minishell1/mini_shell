@@ -19,7 +19,6 @@ typedef struct s_expctx
 	char	*buf;
 }	t_expctx;
 
-/* 현재 문자 기준으로 따옴표 상태를 토글한다. */
 static int	handle_quote(char c, t_expctx *ctx)
 {
 	if ((c == '\'' || c == '\"') && ctx->quote == 0)
@@ -29,7 +28,6 @@ static int	handle_quote(char c, t_expctx *ctx)
 	return (0);
 }
 
-/* $ 확장을 처리해 결과를 단어 조각으로 더한다. */
 static int	handle_dollar(t_shell *shell, const char *src, t_expctx *ctx,
 			char ***out)
 {
@@ -45,7 +43,6 @@ static int	handle_dollar(t_shell *shell, const char *src, t_expctx *ctx,
 	return (PARSE_OK);
 }
 
-/* 한 글자를 해석해 따옴표, 공백, 일반 문자를 분기 처리한다. */
 static int	process_expansion(t_shell *shell, const char *src, t_expctx *ctx,
 			char ***out)
 {
@@ -69,7 +66,6 @@ static int	process_expansion(t_shell *shell, const char *src, t_expctx *ctx,
 	return (PARSE_OK);
 }
 
-/* 단어 하나를 확장해 공백 분리 결과 배열로 반환한다. */
 int	expand_word(t_shell *shell, const char *src, char ***out)
 {
 	t_expctx	ctx;

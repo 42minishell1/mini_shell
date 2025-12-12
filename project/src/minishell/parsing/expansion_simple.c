@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-/* 따옴표가 없는 문자열에서 $ 변수만 간단히 확장한다. */
 char	*expand_str_simple(t_shell *shell, const char *src)
 {
 	size_t	i;
@@ -41,7 +40,6 @@ char	*expand_str_simple(t_shell *shell, const char *src)
 	return (buf);
 }
 
-/* 문자열에서 따옴표만 제거해 순수 텍스트를 얻는다. */
 char	*strip_quotes_only(const char *src)
 {
 	size_t	i;

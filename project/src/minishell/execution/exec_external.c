@@ -12,8 +12,7 @@
 
 #include "minishell.h"
 
-/* "<dir>/<cmd>" 형식의 경로 문자열을 만든다. */
-static char	*join_path(const char *dir, const char *cmd)
+static char	*join_path(const char *dir, char *cmd)
 {
 	char	*tmp;
 	char	*full;
@@ -26,7 +25,6 @@ static char	*join_path(const char *dir, const char *cmd)
 	return (full);
 }
 
-/* PATH 환경변수에 등록된 경로들에서 실행 파일을 찾는다. */
 static char	*find_in_path(t_shell *shell, char *cmd)
 {
 	char	*path_env;
@@ -40,43 +38,72 @@ static char	*find_in_path(t_shell *shell, char *cmd)
 	paths = ft_split(path_env, ':');
 	if (!paths)
 		return (NULL);
-	i = 0;
-	while (paths[i])
+	i = -1;
+	while (paths[++i])
 	{
 		full = join_path(paths[i], cmd);
-		if (full && access(full, X_OK) == 0)
+		if (!full)
+			return (free_str_array(paths), NULL);
+		if (access(full, X_OK) == 0)
 			return (free_str_array(paths), full);
 		free(full);
-		i++;
 	}
 	free_str_array(paths);
 	return (NULL);
 }
 
-/* 절대경로나 PATH 탐색 결과를 이용해 execve를 호출한다. */
-static void	execve_path(t_shell *shell, t_pipe *node)
+static void	print_exec_error(const char *cmd)
+{
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd((char *)cmd, STDERR_FILENO);
+	ft_putstr_fd(": ", STDERR_FILENO);
+	ft_putendl_fd(strerror(errno), STDERR_FILENO);
+}
+
+static void	ensure_exec_access(const char *path, const char *label)
+{
+	struct stat	st;
+
+	if (stat(path, &st) == -1)
+	{
+		print_exec_error(label);
+		exit(127);
+	}
+	if (S_ISDIR(st.st_mode))
+	{
+		errno = EISDIR;
+		print_exec_error(label);
+		exit(126);
+	}
+	if (access(path, X_OK) == -1)
+	{
+		print_exec_error(label);
+		exit(126);
+	}
+}
+
+void	exec_external(t_shell *shell, t_pipe *node)
 {
 	char	*path;
 
+	if (!node->cmd || !node->cmd[0])
+		exit(0);
 	if (ft_strchr(node->cmd[0], '/'))
 	{
+		ensure_exec_access(node->cmd[0], node->cmd[0]);
 		execve(node->cmd[0], node->cmd, shell->envp);
-		return ;
+		print_exec_error(node->cmd[0]);
+		exit(126);
 	}
 	path = find_in_path(shell, node->cmd[0]);
 	if (path)
 	{
+		ensure_exec_access(path, node->cmd[0]);
 		execve(path, node->cmd, shell->envp);
 		free(path);
+		print_exec_error(node->cmd[0]);
+		exit(126);
 	}
-}
-
-/* 빌트인이 아닐 때 외부 명령 실행을 담당한다. */
-void	exec_external(t_shell *shell, t_pipe *node)
-{
-	if (!node->cmd || !node->cmd[0])
-		exit(0);
-	execve_path(shell, node);
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
 	ft_putstr_fd(node->cmd[0], STDERR_FILENO);
 	ft_putendl_fd(": command not found", STDERR_FILENO);
