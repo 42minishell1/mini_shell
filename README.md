@@ -1,6 +1,4 @@
-Minishell
-
-작은 쉘 구현체다. C 코드를 읽는 사람이 흐름을 빠르게 따라가도록, 어떤 파일부터 보면 되는지 안내한다.
+# Minishell
 
 ## 코드 읽기 순서
 1) `project/src/minishell/main.c`  
