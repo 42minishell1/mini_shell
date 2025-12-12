@@ -1,24 +1,21 @@
 # Minishell
-
 ## 코드 읽기 순서
-1) `project/src/minishell/main.c`  
-   - `init_shell` → `prompt` → `destroy_shell` 흐름을 잡는다. `t_shell` 필드가 어떤 역할인지 본다.
-2) `project/src/minishell/prompt.c`  
-   - `readline` 루프, `parse_line` 호출, 성공 시 `execute_pipeline`. 시그널 처리 결과가 `last_status`에 반영되는 부분을 확인한다.
-3) 파싱 단계  
-   - 토큰화: `parsing/lexer.c`, `lexer_tokens.c`, `lexer_utils.c`에서 입력을 토큰 리스트로 만든다.  
-   - 구문 트리화: `parsing/parser.c` → `parser_segment.c`(+`parser_segment_utils.c`)에서 `t_pipe` 노드를 채운다. heredoc은 여기서 큐에 쌓인다.  
-   - 확장: `parsing/expansion_*.c`에서 `$` 확장, 따옴표, 공백 분리를 처리한다.  
-   - 보조: `parser_redir.c`, `parser_nodes.c`, `parser_cleanup.c`에서 리다이렉션 노드 생성/해제 로직을 본다.
-4) 실행 단계  
-   - 파이프라인 오케스트레이션: `execution/exec_pipeline.c`(heredoc 준비 → fork/pipe 루프).  
-   - 자식 쪽: `exec_pipeline_child.c`에서 FD 연결 후 빌트인/외부 명령으로 분기.  
-   - 외부 명령: `exec_external.c`에서 PATH 검색, 접근성 검사, `execve` 호출.  
-   - 부모 빌트인/대기: `exec_utils.c`, `exec_wait.c`에서 단독 빌트인 처리와 종료 코드 수집.  
-   - 빌트인 구현: `execution/builtin.c` 분기와 `echo.c`, `cd.c`, `pwd.c`, `export.c`, `env.c`, `unset.c`, `exit.c`.  
-   - 리다이렉션·heredoc 도우미: `execution/redir*.c`, `heredoc*.c`.
-5) 공용/헤더  
-   - `utils/shell_state.c`(초기화/해제), `utils/signals.c`(시그널).  
+1) 엔트리/루프 (`project/src/minishell/core/`)  
+   - `core/main.c`: `init_shell` → `prompt` → `destroy_shell` 전체 흐름.  
+   - `core/prompt.c`: `readline` 루프, `parse_line` → `execute_pipeline`. 시그널 결과를 `last_status`에 반영.  
+   - `core/shell_state.c`, `core/signals.c`: 환경/FD 백업, 부모/자식 시그널 설정.
+2) 파싱 (`project/src/minishell/parsing/`)  
+   - 토큰화: `parsing/lexer/lexer.c`, `lexer_tokens.c`, `lexer_utils.c`.  
+   - 구문 트리화: `parsing/parser/parser.c` → `parser_segment.c`(+`parser_segment_utils.c`)에서 `t_pipe` 노드 구성, heredoc 큐 적재.  
+   - 확장: `parsing/expansion/expansion_*.c`에서 `$` 확장, 따옴표, 공백 분리.  
+   - 기타: `parser_redir.c`, `parser_nodes.c`, `parser_cleanup.c`에서 리다이렉션 노드 생성/해제.
+3) 실행 (`project/src/minishell/execution/`)  
+   - 파이프라인: `execution/pipeline/exec_pipeline.c`(heredoc 준비 → fork/pipe), `exec_pipeline_child.c`, `exec_utils.c`, `exec_wait.c`.  
+   - 외부 명령: `execution/external/exec_external.c`에서 PATH 검색, 접근성 검사, `execve`.  
+   - 빌트인: `execution/builtins/builtin.c` 분기와 `echo.c`, `cd.c`, `pwd.c`, `export.c`, `env.c`, `unset.c`, `exit.c`.  
+   - 리다이렉션/heredoc: `execution/redirects/redir*.c`, `heredoc*.c`.  
+   - 환경 유틸: `execution/env/env_utils.c`.
+4) 공용 헤더  
    - `project/includes/minishell.h`에서 구조체(`t_tok`, `t_file`, `t_heredoc`, `t_pipe`, `t_shell`)와 전역 상수를 먼저 확인한다.
 
 ## 주요 기능 스냅샷
