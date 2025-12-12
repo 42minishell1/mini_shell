@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+/* 파이프라인의 모든 자식을 기다리고 최종 종료코드를 기록한다. */
 int	wait_pipeline(pid_t *pids, int count, t_shell *shell)
 {
 	int	status;

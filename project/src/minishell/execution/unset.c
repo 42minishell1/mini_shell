@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+/* 셸 변수 규칙에 맞는 키인지 확인한다. */
 static int	is_valid_key(const char *s)
 {
 	int	i;
@@ -28,6 +29,7 @@ static int	is_valid_key(const char *s)
 	return (1);
 }
 
+/* idx 위치의 항목을 제거하고 뒤 항목들을 앞으로 당긴다. */
 static void	remove_entry(char ***envp, size_t idx)
 {
 	size_t	i;
@@ -41,6 +43,7 @@ static void	remove_entry(char ***envp, size_t idx)
 	}
 }
 
+/* envp에서 주어진 키를 찾아 삭제한다. */
 static int	unset_key(char ***envp, const char *key)
 {
 	size_t	len;
@@ -62,6 +65,7 @@ static int	unset_key(char ***envp, const char *key)
 	return (0);
 }
 
+/* unset 빌트인으로 전달된 여러 변수를 순서대로 제거한다. */
 int	unset(t_shell *shell, t_pipe *tool)
 {
 	int	i;

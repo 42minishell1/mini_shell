@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+/* 현재 작업 디렉터리를 표준 출력으로 보여준다. */
 int	pwd(t_pipe *node)
 {
 	char	*cwd;

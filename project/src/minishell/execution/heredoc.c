@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+/* 모든 히어독 노드를 순회하며 임시 파일을 생성한다. */
 int	prepare_heredocs(t_shell *shell, t_pipe *pipeline)
 {
 	t_pipe		*node;
@@ -32,6 +33,7 @@ int	prepare_heredocs(t_shell *shell, t_pipe *pipeline)
 	return (0);
 }
 
+/* 준비 과정에서 만든 히어독 임시 파일들을 삭제한다. */
 void	cleanup_heredocs(t_pipe *pipeline)
 {
 	t_pipe	*node;

@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+/* 단어 안에 따옴표가 포함되었는지 확인한다. */
 int	is_quoted_word(const char *s)
 {
 	size_t	i;
@@ -26,6 +27,7 @@ int	is_quoted_word(const char *s)
 	return (0);
 }
 
+/* heredoc 구문을 처리해 노드와 infile을 설정한다. */
 int	process_heredoc(t_pipe *pipe, t_tok *word, int quoted)
 {
 	int		status;
@@ -41,6 +43,7 @@ int	process_heredoc(t_pipe *pipe, t_tok *word, int quoted)
 	return (status);
 }
 
+/* 리다이렉션 토큰을 실제 파일 설정으로 변환한다. */
 int	process_file_redir(t_shell *shell, t_pipe *pipe,
 			t_tok *redir, t_tok *word)
 {

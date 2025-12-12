@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+/* 문자열이 exit 명령에 쓸 수 있는 숫자인지 검증한다. */
 static int	is_numeric(const char *s)
 {
 	int	i;
@@ -32,6 +33,7 @@ static int	is_numeric(const char *s)
 	return (1);
 }
 
+/* 문자열 인자를 unsigned char 종료 코드로 변환한다. */
 static unsigned char	to_status(const char *s)
 {
 	long long	value;
@@ -55,6 +57,7 @@ static unsigned char	to_status(const char *s)
 	return ((unsigned char)(value * sign));
 }
 
+/* exit 빌트인의 규칙을 구현하고 에러/인자 수를 처리한다. */
 int	exit_builtin(t_shell *shell, t_pipe *tool)
 {
 	unsigned char	code;

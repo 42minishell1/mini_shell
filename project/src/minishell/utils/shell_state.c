@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+/* 환경변수 배열을 복제해 셸에서 독립적으로 관리하도록 만든다. */
 static char	**dup_envp(char **envp)
 {
 	size_t	count;
@@ -37,6 +38,7 @@ static char	**dup_envp(char **envp)
 	return (copy);
 }
 
+/* 셸 구조체를 초기화하고 표준 입출력 백업을 준비한다. */
 void	init_shell(t_shell *shell, char **envp)
 {
 	ft_bzero(shell, sizeof(*shell));
@@ -57,6 +59,7 @@ void	init_shell(t_shell *shell, char **envp)
 	shell->last_status = 0;
 }
 
+/* 셸 종료 시 백업 FD를 복원하고 환경변수를 해제한다. */
 void	destroy_shell(t_shell *shell)
 {
 	if (!shell)

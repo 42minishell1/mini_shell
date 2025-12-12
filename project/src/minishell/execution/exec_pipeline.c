@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+/* 파이프라인 노드를 자식으로 포크하고 필요한 파이프를 연결한다. */
 static int	start_child_process(t_shell *shell, t_pipe *node,
 			pid_t *slot, int *prev_fd)
 {
@@ -30,6 +31,7 @@ static int	start_child_process(t_shell *shell, t_pipe *node,
 	return (0);
 }
 
+/* 부모에서 처리해야 하는 빌트인을 우선 실행하고 필요 시 자식을 포크한다. */
 static int	process_pipeline_node(t_shell *shell, t_pipe **node,
 			pid_t *slot, int *prev_fd)
 {
@@ -46,6 +48,7 @@ static int	process_pipeline_node(t_shell *shell, t_pipe **node,
 	return (0);
 }
 
+/* 파이프라인을 순회하며 제한에 도달하거나 끝날 때까지 자식을 실행한다. */
 static int	run_pipeline_loop(t_shell *shell, t_pipe *node,
 			pid_t *pids, int *count_out)
 {
@@ -75,6 +78,7 @@ static int	run_pipeline_loop(t_shell *shell, t_pipe *node,
 	return (0);
 }
 
+/* 히어독을 준비하고 파이프라인을 실행한 뒤 종료 상태를 모은다. */
 int	execute_pipeline(t_shell *shell, t_pipe *pipeline)
 {
 	t_pipe	*node;

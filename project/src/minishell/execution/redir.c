@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+/* 노드에 지정된 입력 파일 또는 히어독 파일을 연다. */
 static int	open_infile(t_pipe *node)
 {
 	int		fd;
@@ -27,6 +28,7 @@ static int	open_infile(t_pipe *node)
 	return (fd);
 }
 
+/* 노드에 설정된 출력 파일을 모드에 맞게 열거나 생성한다. */
 static int	open_outfile(t_pipe *node)
 {
 	int		fd;
@@ -44,6 +46,7 @@ static int	open_outfile(t_pipe *node)
 	return (fd);
 }
 
+/* 파이프라인 노드의 표준 입출력 리다이렉션을 적용한다. */
 int	open_redir(t_pipe *node)
 {
 	int	out_fd;
@@ -69,6 +72,7 @@ int	open_redir(t_pipe *node)
 	return (0);
 }
 
+/* 노드에 저장된 추가 입력 FD를 닫아 정리한다. */
 void	close_redir(t_pipe *node)
 {
 	if (node->fd != -1)

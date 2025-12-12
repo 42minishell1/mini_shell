@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+/* "<dir>/<cmd>" 형식의 경로 문자열을 만든다. */
 static char	*join_path(const char *dir, const char *cmd)
 {
 	char	*tmp;
@@ -25,6 +26,7 @@ static char	*join_path(const char *dir, const char *cmd)
 	return (full);
 }
 
+/* PATH 환경변수에 등록된 경로들에서 실행 파일을 찾는다. */
 static char	*find_in_path(t_shell *shell, char *cmd)
 {
 	char	*path_env;
@@ -51,6 +53,7 @@ static char	*find_in_path(t_shell *shell, char *cmd)
 	return (NULL);
 }
 
+/* 절대경로나 PATH 탐색 결과를 이용해 execve를 호출한다. */
 static void	execve_path(t_shell *shell, t_pipe *node)
 {
 	char	*path;
@@ -68,6 +71,7 @@ static void	execve_path(t_shell *shell, t_pipe *node)
 	}
 }
 
+/* 빌트인이 아닐 때 외부 명령 실행을 담당한다. */
 void	exec_external(t_shell *shell, t_pipe *node)
 {
 	if (!node->cmd || !node->cmd[0])
