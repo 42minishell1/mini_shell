@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+// heredoc 입력을 프롬프트로 받아 구분자 전까지 파일에 기록한다.
 int	write_heredoc_body(t_shell *shell, const char *delimit, int quoted, int fd)
 {
 	char	*line;

@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+// key에 해당하는 환경변수 값을 찾아 반환한다.
 char	*env_get(char **envp, const char *key)
 {
 	size_t	len;
@@ -30,6 +31,7 @@ char	*env_get(char **envp, const char *key)
 	return (NULL);
 }
 
+// "KEY=VALUE" 형태의 문자열을 만들어 반환한다.
 static char	*build_entry(const char *key, const char *val)
 {
 	char	*tmp;
@@ -43,6 +45,7 @@ static char	*build_entry(const char *key, const char *val)
 	return (entry);
 }
 
+// 이미 존재하는 키라면 새 엔트리로 교체하고 교체 여부를 반환한다.
 static int	replace_existing(char ***envp, const char *key,
 			char *entry, size_t len)
 {
@@ -62,6 +65,7 @@ static int	replace_existing(char ***envp, const char *key,
 	return (0);
 }
 
+// 환경변수 목록에 키를 추가하거나 교체한다.
 int	env_set(char ***envp, const char *key, const char *val)
 {
 	char	*entry;

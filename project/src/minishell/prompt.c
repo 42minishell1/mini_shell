@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+// 입력 한 줄을 파싱해 파이프라인을 실행하고 자원을 정리한다.
 static void	process_line(t_shell *shell, char *line)
 {
 	t_pipe	*pipeline;
@@ -36,6 +37,7 @@ static void	process_line(t_shell *shell, char *line)
 	free_pipeline(pipeline);
 }
 
+// 프롬프트 루프를 돌며 입력을 받고 마지막 종료 코드를 관리한다.
 void	prompt(t_shell *shell)
 {
 	char	*str;

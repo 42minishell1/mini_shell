@@ -50,6 +50,7 @@ int	is_word_char(char c)
 	return (1);
 }
 
+// 따옴표 짝을 고려해 단어 토큰 길이를 계산한다.
 int	measure_word(char *line, int i)
 {
 	int		len;

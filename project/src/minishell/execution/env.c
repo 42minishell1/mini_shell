@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+// env 빌트인: 인자가 없을 때 현재 환경변수 목록을 출력한다.
 int	env_builtin(t_shell *shell, t_pipe *tool)
 {
 	int	i;

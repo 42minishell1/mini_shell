@@ -15,6 +15,7 @@
 int	handle_in_redir(t_pipe *node, const t_file *file);
 int	handle_out_redir(const t_file *file);
 
+// 리다이렉션 타입에 따라 적절한 처리 함수를 호출한다.
 static int	apply_redir(t_pipe *node, t_file *file)
 {
 	if (!file || !file->filename)
@@ -26,6 +27,7 @@ static int	apply_redir(t_pipe *node, t_file *file)
 	return (0);
 }
 
+// 리다이렉션 리스트를 순회하며 파일 디스크립터를 연다.
 int	open_redir(t_pipe *node)
 {
 	t_list	*cur;
@@ -43,6 +45,7 @@ int	open_redir(t_pipe *node)
 	return (0);
 }
 
+// 열려 있는 리다이렉션 FD를 정리한다.
 void	close_redir(t_pipe *node)
 {
 	if (node->fd != -1)

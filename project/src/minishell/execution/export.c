@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+// 환경변수 키가 유효한 식별자인지 검사한다.
 static int	is_valid_key(char *s)
 {
 	int	i;
@@ -28,6 +29,7 @@ static int	is_valid_key(char *s)
 	return (1);
 }
 
+// export 출력 형식에 맞춰 환경변수 목록을 표시한다.
 static int	print_export_env(char **envp)
 {
 	int	i;
@@ -42,6 +44,7 @@ static int	print_export_env(char **envp)
 	return (0);
 }
 
+// 인자로 받은 key=value를 파싱해 환경변수에 반영한다.
 static int	handle_arg(t_shell *shell, char *arg)
 {
 	char	*eq;
@@ -62,6 +65,7 @@ static int	handle_arg(t_shell *shell, char *arg)
 	return (ret);
 }
 
+// export 빌트인: 인자가 없으면 목록을 출력하고, 있으면 설정한다.
 int	export(t_shell *shell, t_pipe *tool)
 {
 	int	i;

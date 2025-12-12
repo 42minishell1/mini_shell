@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+// 파이프라인의 heredoc 리스트를 순회하며 임시 파일을 준비한다.
 int	prepare_heredocs(t_shell *shell, t_pipe *pipeline)
 {
 	t_pipe		*node;
@@ -41,6 +42,7 @@ int	prepare_heredocs(t_shell *shell, t_pipe *pipeline)
 	return (0);
 }
 
+// 생성된 heredoc 임시 파일을 정리한다.
 void	cleanup_heredocs(t_pipe *pipeline)
 {
 	t_pipe	*node;

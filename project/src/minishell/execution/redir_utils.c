@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+// 입력 리다이렉션 파일을 읽기 전용으로 연다.
 static int	open_infile(const t_file *file)
 {
 	int	fd;
@@ -22,6 +23,7 @@ static int	open_infile(const t_file *file)
 	return (fd);
 }
 
+// 출력 리다이렉션 파일을 모드에 맞게 생성/연다.
 static int	open_outfile(const t_file *file)
 {
 	int	fd;
@@ -37,6 +39,7 @@ static int	open_outfile(const t_file *file)
 	return (fd);
 }
 
+// 표준입력을 지정 파일로 연결하고 이전 FD를 정리한다.
 int	handle_in_redir(t_pipe *node, const t_file *file)
 {
 	int	fd;
@@ -52,6 +55,7 @@ int	handle_in_redir(t_pipe *node, const t_file *file)
 	return (0);
 }
 
+// 표준출력을 지정 파일로 연결한다.
 int	handle_out_redir(const t_file *file)
 {
 	int	fd;

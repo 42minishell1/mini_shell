@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+// 셸 상태를 초기화하고 프롬프트 루프를 돌린 뒤 종료 코드를 반환한다.
 int	main(int ac, char **av, char **envp)
 {
 	t_shell	shell;

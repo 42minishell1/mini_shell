@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+// heredoc 임시 파일을 생성하고 경로를 반환한다.
 static int	open_temp(char **path_out)
 {
 	char	*path;
@@ -31,6 +32,7 @@ static int	open_temp(char **path_out)
 	return (fd);
 }
 
+// heredoc 리다이렉션 구조체에 완성된 파일 경로를 반영한다.
 static int	finalize_heredoc_file(t_file *redir, const char *path)
 {
 	free(redir->filename);
@@ -41,6 +43,7 @@ static int	finalize_heredoc_file(t_file *redir, const char *path)
 	return (0);
 }
 
+// heredoc 내용 작성까지 포함해 단일 heredoc을 처리한다.
 int	process_single_heredoc(t_shell *shell, t_file *redir, t_heredoc *hd)
 {
 	char	*tmp_path;

@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+// 기존 버퍼와 새 값을 이어 붙이고 메모리를 정리한다.
 int	append_value(char **buf, char *val)
 {
 	char	*joined;
@@ -27,6 +28,7 @@ int	append_value(char **buf, char *val)
 	return (0);
 }
 
+// 버퍼에 내용이 있으면 단어 리스트에 추가하고 버퍼를 해제한다.
 int	append_buffer(char ***out, char *buf)
 {
 	if (!buf || buf[0] == '\0')
@@ -40,6 +42,7 @@ int	append_buffer(char ***out, char *buf)
 	return (0);
 }
 
+// 현재 버퍼를 결과에 반영한 뒤 빈 버퍼로 다시 마련한다.
 int	flush_buffer(char ***out, char **buf)
 {
 	int	ret;
@@ -49,6 +52,7 @@ int	flush_buffer(char ***out, char **buf)
 	return (ret);
 }
 
+// 공백을 만났을 때 버퍼를 결과로 내보내고 초기화한다.
 int	handle_space(char ***out, char **buf)
 {
 	if (flush_buffer(out, buf) == -1)
@@ -56,6 +60,7 @@ int	handle_space(char ***out, char **buf)
 	return (0);
 }
 
+// 확장된 문자열을 인용 여부에 따라 공백 분리하거나 그대로 버퍼에 붙인다.
 int	add_word_part(char ***out, char **buf, char *val, int quoted)
 {
 	size_t	i;

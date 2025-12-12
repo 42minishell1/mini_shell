@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+// 자식 프로세스에서 파이프 입출력과 리다이렉션을 설정하고 명령을 실행한다.
 void	pipeline_child_process(t_shell *shell, t_pipe *node,
 			int prev_fd, int pipefd[2])
 {
@@ -34,6 +35,7 @@ void	pipeline_child_process(t_shell *shell, t_pipe *node,
 	exec_external(shell, node);
 }
 
+// fork 이후 부모 쪽에서 필요 없는 FD를 정리하고 다음 단계 입력 FD를 남긴다.
 void	pipeline_parent_after_fork(int *prev_fd, int pipefd[2])
 {
 	if (*prev_fd != -1)

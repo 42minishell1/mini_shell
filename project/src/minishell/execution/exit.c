@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+// 문자열이 부호를 포함한 순수 숫자인지 확인한다.
 static int	is_numeric(const char *s)
 {
 	int	i;
@@ -32,6 +33,7 @@ static int	is_numeric(const char *s)
 	return (1);
 }
 
+// 숫자 문자열을 0~255 범위의 종료 코드로 변환한다.
 static unsigned char	to_status(const char *s)
 {
 	long long	value;
@@ -55,6 +57,7 @@ static unsigned char	to_status(const char *s)
 	return ((unsigned char)(value * sign));
 }
 
+// exit 빌트인: 인자를 검증하고 종료 코드를 결정해 프로세스를 종료한다.
 int	exit_builtin(t_shell *shell, t_pipe *tool)
 {
 	unsigned char	code;

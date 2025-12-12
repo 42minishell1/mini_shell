@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+// 인자가 모두 -n 형식인지 확인해 개행 억제 옵션 여부를 판별한다.
 static int	is_nflag(char *s)
 {
 	int	i;
@@ -25,6 +26,7 @@ static int	is_nflag(char *s)
 	return (1);
 }
 
+// echo 빌트인: -n 옵션을 처리해 인자를 출력한다.
 int	echo(t_pipe *node)
 {
 	int		i;

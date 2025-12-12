@@ -19,6 +19,7 @@ typedef struct s_expctx
 	char	*buf;
 }	t_expctx;
 
+// 따옴표 상태를 토글하며 처리했는지 여부를 반환한다.
 static int	handle_quote(char c, t_expctx *ctx)
 {
 	if ((c == '\'' || c == '\"') && ctx->quote == 0)
@@ -28,6 +29,7 @@ static int	handle_quote(char c, t_expctx *ctx)
 	return (0);
 }
 
+// $ 확장을 수행하거나 쿼트 안에서 무시한다.
 static int	handle_dollar(t_shell *shell, const char *src, t_expctx *ctx,
 			char ***out)
 {
@@ -43,6 +45,7 @@ static int	handle_dollar(t_shell *shell, const char *src, t_expctx *ctx,
 	return (PARSE_OK);
 }
 
+// 현재 문자를 보고 따옴표, $, 공백, 일반 문자를 처리한다.
 static int	process_expansion(t_shell *shell, const char *src, t_expctx *ctx,
 			char ***out)
 {
@@ -66,6 +69,7 @@ static int	process_expansion(t_shell *shell, const char *src, t_expctx *ctx,
 	return (PARSE_OK);
 }
 
+// 단어 하나를 읽으면서 따옴표와 환경변수 확장을 적용한다.
 int	expand_word(t_shell *shell, const char *src, char ***out)
 {
 	t_expctx	ctx;

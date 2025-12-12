@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+// 현재 작업 경로를 기준으로 PWD와 OLDPWD 환경변수를 갱신한다.
 static int	update_env_pwd(t_shell *shell, const char *cwd)
 {
 	char	*old;
@@ -26,6 +27,7 @@ static int	update_env_pwd(t_shell *shell, const char *cwd)
 	return (0);
 }
 
+// cd 빌트인: 인자로 받은 경로로 이동하고 관련 환경변수를 업데이트한다.
 int	cd(t_shell *shell, t_pipe *node)
 {
 	char	*target;

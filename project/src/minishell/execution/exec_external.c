@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+// 디렉토리 경로와 명령어를 이어 붙여 전체 경로를 만든다.
 static char	*join_path(const char *dir, char *cmd)
 {
 	char	*tmp;
@@ -25,6 +26,7 @@ static char	*join_path(const char *dir, char *cmd)
 	return (full);
 }
 
+// PATH 환경변수를 순회하며 실행 파일을 찾는다.
 static char	*find_in_path(t_shell *shell, char *cmd)
 {
 	char	*path_env;
@@ -52,6 +54,7 @@ static char	*find_in_path(t_shell *shell, char *cmd)
 	return (NULL);
 }
 
+// 실행 실패 시 일관된 에러 메시지를 출력한다.
 static void	print_exec_error(const char *cmd)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
@@ -60,6 +63,7 @@ static void	print_exec_error(const char *cmd)
 	ft_putendl_fd(strerror(errno), STDERR_FILENO);
 }
 
+// 경로가 존재하고 실행 가능하며 디렉토리가 아닌지 검사한다.
 static void	ensure_exec_access(const char *path, const char *label)
 {
 	struct stat	st;
@@ -82,6 +86,7 @@ static void	ensure_exec_access(const char *path, const char *label)
 	}
 }
 
+// 외부 명령 실행: 절대/상대 경로 또는 PATH 검색을 통해 execve를 호출한다.
 void	exec_external(t_shell *shell, t_pipe *node)
 {
 	char	*path;

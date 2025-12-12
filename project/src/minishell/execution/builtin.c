@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+// 명령어가 셸 빌트인인지 확인한다.
 int	is_builtin(char **cmd)
 {
 	if (!cmd || !cmd[0])
@@ -26,6 +27,7 @@ int	is_builtin(char **cmd)
 	return (0);
 }
 
+// 부모 프로세스에서 실행해야 하는 빌트인을 분기 실행한다.
 int	run_builtin_parent(t_shell *shell, t_pipe *node)
 {
 	if (!node->cmd || !node->cmd[0])
@@ -41,6 +43,7 @@ int	run_builtin_parent(t_shell *shell, t_pipe *node)
 	return (-1);
 }
 
+// 자식 프로세스에서 실행되는 빌트인을 분기 실행한다.
 int	run_builtin_child(t_shell *shell, t_pipe *node)
 {
 	if (!node->cmd || !node->cmd[0])

@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+// pwd 빌트인: 현재 작업 디렉토리를 출력한다.
 int	pwd(t_pipe *node)
 {
 	char	*cwd;

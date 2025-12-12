@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+// 따옴표 상태를 고려하지 않고 $변수를 단순 치환한다.
 char	*expand_str_simple(t_shell *shell, const char *src)
 {
 	size_t	i;
@@ -40,6 +41,7 @@ char	*expand_str_simple(t_shell *shell, const char *src)
 	return (buf);
 }
 
+// 문자열에서 따옴표만 제거하고 나머지는 그대로 반환한다.
 char	*strip_quotes_only(const char *src)
 {
 	size_t	i;

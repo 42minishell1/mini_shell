@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+// 환경변수 키가 유효한 식별자인지 검사한다.
 static int	is_valid_key(const char *s)
 {
 	int	i;
@@ -28,6 +29,7 @@ static int	is_valid_key(const char *s)
 	return (1);
 }
 
+// 인덱스 위치의 엔트리를 제거하고 이후 요소를 한 칸씩 당긴다.
 static void	remove_entry(char ***envp, size_t idx)
 {
 	size_t	i;
@@ -41,6 +43,7 @@ static void	remove_entry(char ***envp, size_t idx)
 	}
 }
 
+// 주어진 키를 찾아 환경변수 배열에서 삭제한다.
 static int	unset_key(char ***envp, const char *key)
 {
 	size_t	len;
@@ -62,6 +65,7 @@ static int	unset_key(char ***envp, const char *key)
 	return (0);
 }
 
+// unset 빌트인: 인자로 받은 환경변수를 제거한다.
 int	unset(t_shell *shell, t_pipe *tool)
 {
 	int	i;
